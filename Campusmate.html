@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIT Sindri dummy</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind to use Inter font -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-blue': '#1e3a8a', // Deep Blue
+                        'accent-gold': '#f59e0b', // Amber/Gold
+                        'secondary-gray': '#f3f4f6', // Light Gray background
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Load Inter font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the fixed header and smooth transitions */
+        .header-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .animate-ticker {
+            animation: ticker-animation 15s linear infinite;
+        }
+        @keyframes ticker-animation {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        /* Style for the "New!" badge */
+        .new-badge {
+            animation: pulse-effect 1s infinite alternate;
+        }
+        @keyframes pulse-effect {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+        /* Active menu classes for desktop */
+        .nav-active {
+            color: #b91c1c; /* Red-700 */
+            font-weight: 700; /* bold */
+            border-bottom: 2px solid #b91c1c; 
+        }
+        /* Active menu classes for mobile */
+        .mobile-nav-active {
+            background-color: #f3f4f6; /* secondary-gray */
+            color: #b91c1c;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="font-sans bg-secondary-gray">
+
+    <!-- Header and Navigation Bar (Fixed Top) -->
+    <header class="sticky top-0 z-50 bg-white header-shadow">
+        <!-- Top Info Bar -->
+        <div class="bg-primary-blue text-white text-xs py-1 px-4 hidden md:block">
+            <div class="max-w-7xl mx-auto flex justify-end space-x-4">
+                <a href="#" class="hover:text-accent-gold transition">ERP Login</a>
+                <!-- ADMIN Link: Changed text-white to be explicit. It was implicitly text-white from the parent div. -->
+                <a href="#" id="nav-admin" onclick="navigateTo('admin-page')" class="text-white hover:text-red-300 transition font-bold">ADMIN</a>
+                <a href="#" class="hover:text-accent-gold transition">Alumni Portal</a>
+                <a href="#" class="hover:text-accent-gold transition">Contact Us</a>
+            </div>
+        </div>
+
+        <!-- Main Navigation -->
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <!-- Logo and Name (Clickable to return home) -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('homepage-content')">
+                <!-- University Logo Placeholder -->
+                <div class="w-10 h-10 bg-accent-gold rounded-full flex items-center justify-center text-primary-blue font-bold text-xl">B</div>
+                <span class="text-xl font-extrabold text-primary-blue tracking-tight">
+                BIT Sindri
+                </span>
+            </div>
+
+            <!-- Desktop Navigation Links -->
+            <div id="desktop-nav" class="hidden lg:flex space-x-8">
+                <!-- Added IDs for dynamic styling -->
+                <a href="#" id="nav-homepage-content" onclick="navigateTo('homepage-content')" class="text-gray-700 hover:text-primary-blue font-medium transition">Home</a>
+                <a href="#" id="nav-notices-page" onclick="navigateTo('notices-page')" class="text-gray-700 hover:text-primary-blue font-medium transition">Notices</a>
+                <!-- ACADEMICS LINK UPDATED -->
+                <a href="#" id="nav-academics-page" onclick="navigateTo('academics-page')" class="text-gray-700 hover:text-primary-blue font-medium transition">Academics</a>
+                <!-- ABOUT US LINK UPDATED -->
+                <a href="#" id="nav-about-us-page" onclick="navigateTo('about-us-page')" class="text-gray-700 hover:text-primary-blue font-medium transition">About Us</a>
+                <!-- ADMISSIONS LINK UPDATED -->
+                <a href="#" id="nav-admissions-page" onclick="navigateTo('admissions-page')" class="text-gray-700 hover:text-primary-blue font-medium transition">Admissions</a>
+                <!-- DEPARTMENTS LINK UPDATED -->
+                <a href="#" id="nav-departments-page" onclick="navigateTo('departments-page')" class="text-gray-700 hover:text-primary-blue font-medium transition">Departments</a>
+                <!-- R&D LINK UPDATED -->
+                <a href="#" id="nav-rd-page" onclick="navigateTo('rd-page')" class="text-gray-700 hover:text-primary-blue font-medium transition">R&D</a>
+            </div>
+
+            <!-- Search Button (Optional) -->
+            <button class="hidden lg:block bg-accent-gold text-primary-blue px-4 py-2 rounded-full font-semibold hover:bg-yellow-500 transition shadow-md">
+                Search
+            </button>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="lg:hidden text-primary-blue p-2 rounded-md hover:bg-secondary-gray transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-200">
+            <div class="flex flex-col space-y-2 p-4">
+                <!-- Added IDs for dynamic styling -->
+                <a href="#" id="mobile-nav-homepage-content" onclick="navigateTo('homepage-content')" class="text-gray-700 hover:bg-secondary-gray p-2 rounded-md transition">Home</a>
+                <a href="#" id="mobile-nav-notices-page" onclick="navigateTo('notices-page')" class="text-gray-700 hover:bg-secondary-gray p-2 rounded-md transition">Notices</a>
+                <!-- ACADEMICS LINK UPDATED -->
+                <a href="#" id="mobile-nav-academics-page" onclick="navigateTo('academics-page')" class="text-gray-700 hover:bg-secondary-gray p-2 rounded-md transition">Academics</a>
+                <!-- ABOUT US LINK UPDATED -->
+                <a href="#" id="mobile-nav-about-us-page" onclick="navigateTo('about-us-page')" class="text-gray-700 hover:bg-secondary-gray p-2 rounded-md transition">About Us</a>
+                <!-- ADMISSIONS LINK UPDATED -->
+                <a href="#" id="mobile-nav-admissions-page" onclick="navigateTo('admissions-page')" class="text-gray-700 hover:bg-secondary-gray p-2 rounded-md transition">Admissions</a>
+                <!-- DEPARTMENTS LINK UPDATED -->
+                <a href="#" id="mobile-nav-departments-page" onclick="navigateTo('departments-page')" class="text-gray-700 hover:bg-secondary-gray p-2 rounded-md transition">Departments</a>
+                <!-- R&D LINK UPDATED -->
+                <a href="#" id="mobile-nav-rd-page" onclick="navigateTo('rd-page')" class="text-gray-700 hover:bg-secondary-gray p-2 rounded-md transition">R&D</a>
+                <a href="#" class="text-primary-blue bg-accent-gold p-2 rounded-md text-center font-semibold mt-2">ERP Login</a>
+                <a href="#" id="mobile-nav-admin" onclick="navigateTo('admin-page')" class="text-red-700 hover:bg-secondary-gray p-2 rounded-md transition">ADMIN</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main>
+
+        <!-- 1. HOME PAGE CONTENT -->
+        <section id="homepage-content">
+            <!-- Ticker -->
+            <div class="bg-red-700 text-white overflow-hidden">
+                <div class="max-w-7xl mx-auto flex items-center px-4">
+                    <span class="text-sm font-bold bg-red-900 px-3 py-1 mr-4 rounded-r-md">ANNOUNCEMENTS</span>
+                    <div class="whitespace-nowrap flex-1 overflow-hidden">
+                        <div class="inline-block animate-ticker py-1">
+                            &bull; Admissions for B.Tech 2025 closing soon! Apply now! &bull; New Research Grant secured by Mechanical Dept. &bull; Mid-semester examination dates released. &bull;
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Banner -->
+            <div class="relative h-[300px] md:h-[650px] bg-indigo-600 overflow-hidden shadow-lg">
+                <img src="image.png" alt="Campus Building" class="w-full h-full object-cover opacity-70">
+                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                    <div class="text-center p-4">
+                        <h1 class="text-3xl sm:text-5xl font-extrabold text-white mb-4 drop-shadow-lg">
+                            Excellence in Engineering & Technology
+                        </h1>
+                        <p class="text-lg text-gray-200 hidden sm:block">
+                            A Premier Institute for Technical Education Since 1949.
+                        </p>
+                        <a href="#" class="mt-6 inline-block bg-accent-gold text-primary-blue font-bold py-3 px-6 rounded-lg hover:bg-yellow-500 transition-transform transform hover:scale-105 shadow-xl">
+                            Explore Programs
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Director's Message & Quick Links -->
+            <section class="max-w-7xl mx-auto p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                <!-- Director's Message Card -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-xl border-t-4 border-primary-blue">
+                    <h2 class="text-2xl font-bold text-primary-blue mb-4 flex items-center">
+                        <span class="mr-2 text-3xl">👤</span> Director's Message
+                    </h2>
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="w-28 h-28 flex-shrink-0">
+                            <img src="https://www.bitsindri.ac.in/old/faculty-profile/images/faculty/pankaj.png" alt="Director Photo" class="w-full h-full object-cover rounded-xl shadow-md">
+                        </div>
+                        <p class="text-gray-700 leading-relaxed text-sm md:text-base">
+                            "Welcome to the Birsa Institute of Technology. Our institution is dedicated to nurturing future leaders and innovators through rigorous academic programs and a vibrant research ecosystem. We believe in holistic development, fostering not only technical proficiency but also ethical values and social responsibility. Our faculty are committed to providing an environment where creativity and critical thinking flourish. Join us in this journey of learning and discovery."
+                            <span class="block mt-2 font-semibold text-primary-blue">- Prof. Pankaj Rai (Director)</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="bg-white p-6 rounded-xl shadow-xl border-t-4 border-accent-gold">
+                    <h2 class="text-2xl font-bold text-primary-blue mb-4 flex items-center">
+                        <span class="mr-2 text-3xl">🔗</span> Quick Links
+                    </h2>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-700 hover:text-red-600 font-medium transition flex items-center">Admission 2025-26 Guidelines</a></li>
+                        <li><a href="#" class="text-gray-700 hover:text-primary-blue transition flex items-center">Academic Calendar</a></li>
+                        <li><a href="#" class="text-gray-700 hover:text-primary-blue transition flex items-center">Tender Notices</a></li>
+                        <li><a href="#" class="text-gray-700 hover:text-primary-blue transition flex items-center">Faculty Recruitment</a></li>
+                        <li><a href="#" class="text-gray-700 hover:text-primary-blue transition flex items-center">Library Services</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Academic Departments Section (Full width, remains the same) -->
+            <section class="max-w-7xl mx-auto p-4 sm:p-8 mt-12">
+                <h2 class="text-3xl font-extrabold text-center text-primary-blue mb-10">Our Core Departments</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Department Card 1 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 border-b-4 border-red-500">
+                        <div class="text-4xl text-red-500 mb-3">🛠️</div>
+                        <h3 class="text-xl font-semibold text-primary-blue mb-2">Mechanical Engineering</h3>
+                        <p class="text-gray-600 text-sm">Focusing on design, manufacturing, and operation of machinery.</p>
+                    </div>
+                    <!-- Department Card 2 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 border-b-4 border-green-500">
+                        <div class="text-4xl text-green-500 mb-3">💻</div>
+                        <h3 class="text-xl font-semibold text-primary-blue mb-2">Computer Science & Eng.</h3>
+                        <p class="text-gray-600 text-sm">Pioneering research in AI, data science, and secure computing.</p>
+                    </div>
+                    <!-- Department Card 3 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 border-b-4 border-yellow-500">
+                        <div class="text-4xl text-yellow-500 mb-3">💡</div>
+                        <h3 class="text-xl font-semibold text-primary-blue mb-2">Electrical Engineering</h3>
+                        <p class="text-gray-600 text-sm">Specializing in power systems, control, and electronics.</p>
+                    </div>
+                    <!-- Department Card 4 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 border-b-4 border-blue-500">
+                        <div class="text-4xl text-blue-500 mb-3">🧱</div>
+                        <h3 class="text-xl font-semibold text-primary-blue mb-2">Civil Engineering</h3>
+                        <p class="text-gray-600 text-sm">Building the future with sustainable infrastructure planning.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- News and Notice Board Section -->
+            <section class="max-w-7xl mx-auto p-4 sm:p-8 mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Left Column (Latest News & Events - Takes 2/3 width on large screens) -->
+                <div class="lg:col-span-2">
+                    <h2 class="text-3xl font-extrabold text-primary-blue mb-6 border-b-2 border-primary-blue pb-2">Latest News & Events</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- News Item 1 -->
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg border hover:border-accent-gold transition duration-300">
+                            <img src="bit tech event.jpg" alt="News Image" class="w-full h-48 object-cover">
+                            <div class="p-4">
+                                <p class="text-sm text-gray-500 mb-1">SEP 25, 2025</p>
+                                <h3 class="text-lg font-bold text-primary-blue hover:text-accent-gold transition">
+                                    Annual Tech Fest "Innovate 24" Concludes Successfully
+                                </h3>
+                                <p class="text-gray-600 text-sm mt-2">The four-day event saw massive participation from over 50 colleges nationwide...</p>
+                                <a href="#" class="text-primary-blue font-semibold text-sm mt-3 inline-block hover:underline">Read More →</a>
+                            </div>
+                        </div>
+                        <!-- News Item 2 -->
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg border hover:border-accent-gold transition duration-300">
+                            <img src="seminar bit.jpg" alt="News Image" class="w-full h-48 object-cover">
+                            <div class="p-4">
+                                <p class="text-sm text-gray-500 mb-1">SEP 18, 2025</p>
+                                <h3 class="text-lg font-bold text-primary-blue hover:text-accent-gold transition">
+                                    Seminar on Quantum Computing by Dr. S. Rao
+                                </h3>
+                                <p class="text-gray-600 text-sm mt-2">Dr. Rao, a leading expert, shared insights on the future of computational paradigms...</p>
+                                <a href="#" class="text-primary-blue font-semibold text-sm mt-3 inline-block hover:underline">Read More →</a>
+                            </div>
+                        </div>
+                        <!-- News Item 3 -->
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg border hover:border-accent-gold transition duration-300">
+                            <img src="placement bit sindri.jpg" alt="News Image" class="w-full h-48 object-cover">
+                            <div class="p-4">
+                                <p class="text-sm text-gray-500 mb-1">SEP 10, 2025</p>
+                                <h3 class="text-lg font-bold text-primary-blue hover:text-accent-gold transition">
+                                    Record Placement Season Kicks Off Early
+                                </h3>
+                                <p class="text-gray-600 text-sm mt-2">The first phase of placements sees a 15% increase in average salary packages...</p>
+                                <a href="#" class="text-primary-blue font-semibold text-sm mt-3 inline-block hover:underline">Read More →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column (Notice Board Snippet - Dynamic Content) -->
+                <div class="lg:col-span-1 bg-white rounded-xl shadow-xl border-t-4 border-red-500 p-6">
+                    <h2 class="text-2xl font-bold text-red-700 mb-4 flex items-center border-b pb-2">
+                        <span class="mr-2 text-3xl">🔔</span> Notice Board
+                    </h2>
+                    <ul id="homepage-notices-list" class="space-y-4 text-sm">
+                        <!-- Notices will be rendered here by JS -->
+                    </ul>
+                    <!-- Link to open the dedicated page -->
+                    <a href="#" onclick="navigateTo('notices-page')" class="mt-4 block text-center text-accent-gold font-bold hover:underline transition">
+                        View All Notices →
+                    </a>
+                </div>
+            </section>
+            <!-- End News and Notice Board Section -->
+        </section>
+
+
+        <!-- 2. DEDICATED NOTICES PAGE CONTENT (Re-added, initially hidden) -->
+        <section id="notices-page" class="hidden min-h-screen pt-10 pb-16">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-4xl font-extrabold text-primary-blue">Official Notice Board</h1>
+                    <button onclick="navigateTo('homepage-content')" class="flex items-center text-primary-blue hover:text-accent-gold font-semibold transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Back to Home
+                    </button>
+                </div>
+                
+                <div id="full-notices-list" class="bg-white p-6 rounded-xl shadow-xl border-t-4 border-red-500 divide-y divide-gray-200">
+                    <!-- Full notices list will be rendered here by JS -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- 4. DEDICATED ACADEMICS PAGE CONTENT -->
+        <section id="academics-page" class="hidden min-h-screen pt-10 pb-16">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-4xl font-extrabold text-primary-blue border-b-4 border-accent-gold pb-2">Academic Programs & Structure</h1>
+                    <button onclick="navigateTo('homepage-content')" class="flex items-center text-primary-blue hover:text-accent-gold font-semibold transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Back to Home
+                    </button>
+                </div>
+
+                <!-- Academic Program Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                    <!-- B.Tech Card -->
+                    <div class="bg-white p-6 rounded-xl shadow-xl border-l-4 border-primary-blue">
+                        <h2 class="text-2xl font-bold text-primary-blue mb-3">B.Tech (Undergraduate)</h2>
+                        <p class="text-gray-600 mb-4">Four-year, eight-semester program spanning 10 core engineering branches. Admission based on national entrance exams.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1 text-sm">
+                            <li>Computer Science & Engineering</li>
+                            <li>Mechanical Engineering</li>
+                            <li>Electrical Engineering</li>
+                            <li>Civil Engineering</li>
+                        </ul>
+                        <a href="#" class="mt-4 inline-block text-accent-gold font-semibold hover:underline">View Syllabus →</a>
+                    </div>
+                    
+                    <!-- M.Tech Card -->
+                    <div class="bg-white p-6 rounded-xl shadow-xl border-l-4 border-accent-gold">
+                        <h2 class="text-2xl font-bold text-primary-blue mb-3">M.Tech (Postgraduate)</h2>
+                        <p class="text-gray-600 mb-4">Two-year advanced program focused on specialized research and industry-relevant skills.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1 text-sm">
+                            <li>Structural Engineering</li>
+                            <li>Thermal Engineering</li>
+                            <li>Power Systems</li>
+                            <li>Data Science & AI</li>
+                        </ul>
+                        <a href="#" class="mt-4 inline-block text-accent-gold font-semibold hover:underline">Admission Criteria →</a>
+                    </div>
+
+                    <!-- Ph.D. Card -->
+                    <div class="bg-white p-6 rounded-xl shadow-xl border-l-4 border-red-500">
+                        <h2 class="text-2xl font-bold text-primary-blue mb-3">Ph.D. (Doctoral Research)</h2>
+                        <p class="text-gray-600 mb-4">Cutting-edge research across all departments, supported by institute and external funding.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1 text-sm">
+                            <li>Full-Time & Part-Time Options</li>
+                            <li>Monthly Stipend Provided</li>
+                            <li>Inter-disciplinary Research Encouraged</li>
+                        </ul>
+                        <a href="#" class="mt-4 inline-block text-accent-gold font-semibold hover:underline">Apply for Research →</a>
+                    </div>
+                </div>
+
+                <!-- Academic Calendar -->
+                <div class="bg-white p-6 rounded-xl shadow-xl border-t-4 border-primary-blue">
+                    <h2 class="text-2xl font-bold text-primary-blue mb-4">Academic Calendar 2025-2026</h2>
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-secondary-gray">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Semester</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Registration for New Students</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Aug 15, 2025</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Odd</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Mid-Semester Examination</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Oct 20-25, 2025</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Odd</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">End-Semester Examination</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Dec 10-20, 2025</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Odd</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">New Semester Classes Begin</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Jan 10, 2026</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Even</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 5. DEDICATED ABOUT US PAGE CONTENT -->
+        <section id="about-us-page" class="hidden min-h-screen pt-10 pb-16">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-4xl font-extrabold text-primary-blue border-b-4 border-red-700 pb-2">About Birsa Institute of Technology</h1>
+                    <button onclick="navigateTo('homepage-content')" class="flex items-center text-primary-blue hover:text-accent-gold font-semibold transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Back to Home
+                    </button>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-xl border-t-4 border-red-500">
+                    <!-- History Section -->
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-red-700 mb-4">Our Legacy and History</h2>
+                        <p class="text-gray-700 mb-4 leading-relaxed">
+                            Established in **1956**, Birsa Institute of Technology has a long and proud history as one of the premier technical institutions in the region. Founded with a vision to catalyze industrial growth, the institute quickly became a beacon for engineering education, providing skilled human resources to the nation's core sectors. For nearly seven decades, we have continuously evolved, expanding our academic offerings and embracing cutting-edge research while maintaining our foundational commitment to excellence and public service.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed">
+                            Our alumni network spans the globe, holding leadership positions in major corporations, government bodies, and academia, a testament to the quality of education imparted here.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Mission -->
+                        <div>
+                            <h2 class="text-3xl font-bold text-red-700 mb-4 flex items-center">Mission</h2>
+                            <ul class="list-disc list-inside text-gray-700 space-y-3 pl-4">
+                                <li>To impart high-quality technical education across undergraduate, postgraduate, and doctoral levels.</li>
+                                <li>To foster a culture of **innovation and interdisciplinary research** addressing global challenges.</li>
+                                <li>To instill strong ethical values and leadership qualities in students, preparing them to be socially responsible professionals.</li>
+                                <li>To collaborate actively with industry and government bodies for technology transfer and applied research.</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Vision -->
+                        <div>
+                            <h2 class="text-3xl font-bold text-red-700 mb-4 flex items-center">Vision</h2>
+                            <p class="text-gray-700 leading-relaxed italic border-l-4 border-accent-gold pl-4 py-2">
+                                "To be recognized globally as a leading institution for engineering and technology, driving sustainable development through educational excellence, pioneering research, and dedicated service to humanity."
+                            </p>
+                            <img src="https://placehold.co/400x200/d1d5db/4b5563?text=Vision+Image" alt="Abstract image of vision" class="w-full rounded-lg mt-4 shadow-md">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. DEDICATED ADMISSIONS PAGE CONTENT -->
+        <section id="admissions-page" class="hidden min-h-screen pt-10 pb-16">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-4xl font-extrabold text-primary-blue border-b-4 border-red-700 pb-2">Admissions 2025-2026</h1>
+                    <button onclick="navigateTo('homepage-content')" class="flex items-center text-primary-blue hover:text-accent-gold font-semibold transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Back to Home
+                    </button>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-xl border-t-4 border-primary-blue">
+                    <p class="text-lg text-gray-700 mb-6 font-medium">
+                        Welcome to the Birsa Institute of Technology Admissions Portal. We offer rigorous programs based on national-level competitive examinations. Please review the criteria and schedule below.
+                    </p>
+
+                    <!-- Admissions Tabs/Sections -->
+                    <div class="space-y-10">
+                        
+                        <!-- B.Tech Admission -->
+                        <div>
+                            <h2 class="text-3xl font-bold text-red-700 mb-4 border-b-2 pb-2 flex items-center">
+                                B.Tech (Undergraduate)
+                            </h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="col-span-1">
+                                    <h3 class="text-xl font-semibold text-primary-blue mb-2">Eligibility</h3>
+                                    <ul class="list-disc list-inside text-gray-700 text-sm space-y-1">
+                                        <li>10+2 with minimum 75% aggregate in PCM.</li>
+                                        <li>Must have secured a rank in **JEE Main 2025**.</li>
+                                        <li>Age limit applies (see official brochure).</li>
+                                    </ul>
+                                </div>
+                                <div class="col-span-1">
+                                    <h3 class="text-xl font-semibold text-primary-blue mb-2">Selection Process</h3>
+                                    <p class="text-gray-700 text-sm">
+                                        Admission is strictly based on the **JoSAA/CSAB counselling** process, utilizing the candidate's JEE Main All India Rank (AIR).
+                                    </p>
+                                    <a href="#" class="mt-2 inline-block text-accent-gold font-semibold hover:underline text-sm">View JoSAA Schedule →</a>
+                                </div>
+                                <div class="col-span-1 bg-secondary-gray p-4 rounded-lg">
+                                    <h3 class="text-xl font-semibold text-primary-blue mb-2">Important Dates</h3>
+                                    <p class="text-gray-700 text-sm">
+                                        Application Window: **May 15 - June 30, 2025**<br>
+                                        Counselling Begins: **July 2025**<br>
+                                        Classes Start: **August 15, 2025**
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- M.Tech Admission -->
+                        <div>
+                            <h2 class="text-3xl font-bold text-red-700 mb-4 border-b-2 pb-2 flex items-center">
+                                M.Tech (Postgraduate)
+                            </h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="col-span-1">
+                                    <h3 class="text-xl font-semibold text-primary-blue mb-2">Eligibility</h3>
+                                    <p class="text-gray-700 text-sm">
+                                        B.E./B.Tech degree in the relevant discipline with minimum 60% aggregate or 6.5 CGPA.
+                                    </p>
+                                    <ul class="list-disc list-inside text-gray-700 text-sm space-y-1 mt-2">
+                                        <li>Must possess a valid **GATE Score**.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-span-1">
+                                    <h3 class="text-xl font-semibold text-primary-blue mb-2">Selection Process</h3>
+                                    <p class="text-gray-700 text-sm">
+                                        Admission is handled through the **CCMT counselling** based on GATE score, followed by potential departmental interviews for certain specializations.
+                                    </p>
+                                </div>
+                                <div class="col-span-1 bg-secondary-gray p-4 rounded-lg">
+                                    <h3 class="text-xl font-semibold text-primary-blue mb-2">Fee Structure (Annual)</h3>
+                                    <p class="text-gray-700 text-sm">
+                                        Tuition Fee: **$25,000 INR**<br>
+                                        Other Fees: **$5,000 INR**<br>
+                                        (Subject to change per academic session 2025-26)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 7. DEDICATED DEPARTMENTS PAGE CONTENT (NEW) -->
+        <section id="departments-page" class="hidden min-h-screen pt-10 pb-16">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-4xl font-extrabold text-primary-blue border-b-4 border-red-700 pb-2">Academic Departments</h1>
+                    <button onclick="navigateTo('homepage-content')" class="flex items-center text-primary-blue hover:text-accent-gold font-semibold transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Back to Home
+                    </button>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Core Engineering -->
+                    <div class="bg-white p-6 rounded-xl shadow-xl border-l-4 border-primary-blue">
+                        <h2 class="text-3xl font-bold text-primary-blue mb-4">Core Engineering & Sciences</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Dept Card 1 -->
+                            <div class="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
+                                <h3 class="text-xl font-semibold text-red-700">Mechanical Engineering</h3>
+                                <p class="text-gray-600 text-sm mt-1">Specializations in thermal, design, and manufacturing.</p>
+                            </div>
+                            <!-- Dept Card 2 -->
+                            <div class="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
+                                <h3 class="text-xl font-semibold text-red-700">Computer Science & Eng.</h3>
+                                <p class="text-gray-600 text-sm mt-1">Focus on AI, Machine Learning, and Cybersecurity.</p>
+                            </div>
+                            <!-- Dept Card 3 -->
+                            <div class="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
+                                <h3 class="text-xl font-semibold text-red-700">Electrical Engineering</h3>
+                                <p class="text-gray-600 text-sm mt-1">Power systems, high voltage engineering, and control theory.</p>
+                            </div>
+                            <!-- Dept Card 4 -->
+                            <div class="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
+                                <h3 class="text-xl font-semibold text-red-700">Civil Engineering</h3>
+                                <p class="text-gray-600 text-sm mt-1">Structural design, water resources, and transportation.</p>
+                            </div>
+                            <!-- Dept Card 5 -->
+                            <div class="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
+                                <h3 class="text-xl font-semibold text-red-700">Chemical Engineering</h3>
+                                <p class="text-gray-600 text-sm mt-1">Process design, petrochemicals, and environmental engineering.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Humanities & Basic Sciences -->
+                    <div class="bg-white p-6 rounded-xl shadow-xl border-l-4 border-accent-gold">
+                        <h2 class="text-3xl font-bold text-primary-blue mb-4">Humanities & Basic Sciences</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Dept Card 6 -->
+                            <div class="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
+                                <h3 class="text-xl font-semibold text-red-700">Department of Physics</h3>
+                            </div>
+                            <!-- Dept Card 7 -->
+                            <div class="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
+                                <h3 class="text-xl font-semibold text-red-700">Department of Mathematics</h3>
+                            </div>
+                            <!-- Dept Card 8 -->
+                            <div class="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
+                                <h3 class="text-xl font-semibold text-red-700">Humanities & Social Sciences</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. DEDICATED R&D PAGE CONTENT (NEW) -->
+        <section id="rd-page" class="hidden min-h-screen pt-10 pb-16">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-4xl font-extrabold text-primary-blue border-b-4 border-red-700 pb-2">Research & Development (R&D)</h1>
+                    <button onclick="navigateTo('homepage-content')" class="flex items-center text-primary-blue hover:text-accent-gold font-semibold transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Back to Home
+                    </button>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-xl border-t-4 border-red-500">
+                    <!-- Thrust Areas -->
+                    <div class="mb-10">
+                        <h2 class="text-3xl font-bold text-red-700 mb-5">Core Research Thrust Areas</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-secondary-gray p-4 rounded-lg shadow-inner">
+                                <h3 class="text-xl font-semibold text-primary-blue">Sustainable Energy Systems</h3>
+                                <p class="text-gray-700 text-sm mt-1">Focusing on solar power, smart grids, and clean coal technologies.</p>
+                            </div>
+                            <div class="bg-secondary-gray p-4 rounded-lg shadow-inner">
+                                <h3 class="text-xl font-semibold text-primary-blue">Advanced Materials & Nanotechnology</h3>
+                                <p class="text-gray-700 text-sm mt-1">Development of composite materials and nanoscale fabrication for industry.</p>
+                            </div>
+                            <div class="bg-secondary-gray p-4 rounded-lg shadow-inner">
+                                <h3 class="text-xl font-semibold text-primary-blue">Artificial Intelligence & IoT</h3>
+                                <p class="text-gray-700 text-sm mt-1">Machine Learning applications, industrial automation, and cognitive computing.</p>
+                            </div>
+                            <div class="bg-secondary-gray p-4 rounded-lg shadow-inner">
+                                <h3 class="text-xl font-semibold text-primary-blue">Environmental Remediation</h3>
+                                <p class="text-gray-700 text-sm mt-1">Water purification, waste management, and pollution control technologies.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Research Facilities -->
+                    <div>
+                        <h2 class="text-3xl font-bold text-red-700 mb-5">Research Centers & Facilities</h2>
+                        <ul class="list-disc list-inside text-gray-700 space-y-3 pl-4">
+                            <li>**Central Research Facility (CRF):** State-of-the-art analytical instrumentation and specialized testing labs.</li>
+                            <li>**Industry-Institute Partnership Cell (IIPC):** Facilitating joint research projects and technology transfer.</li>
+                            <li>**Technology Business Incubator (TBI):** Supporting faculty and student startups based on research outcomes.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 3. ADMIN PAGE (Restored) -->
+        <section id="admin-page" class="hidden min-h-screen pt-10 pb-16">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-4xl font-extrabold text-red-700">Notice Admin Panel</h1>
+                    <button onclick="navigateTo('homepage-content')" class="flex items-center text-primary-blue hover:text-accent-gold font-semibold transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Back to Home
+                    </button>
+                </div>
+
+                <!-- Admin Status/Message Container -->
+                <div id="admin-message" class="hidden p-4 mb-4 rounded-xl font-medium" role="alert"></div>
+                
+                <!-- NOTE: This section now only generates and displays the code to copy/paste -->
+                <div id="admin-output-container">
+                    <div id="publish-success-message" class="hidden bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-lg" role="alert">
+                        <p class="font-bold">Notice Code Generated!</p>
+                        <p>To make this notice permanent, please COPY the code below and paste it into the <code>defaultNotices</code> array in your <code>index.html</code> file.</p>
+                    </div>
+
+                    <div id="generated-code-box" class="hidden bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-xs overflow-auto mb-6">
+                        <!-- Generated code will go here -->
+                    </div>
+                </div>
+
+
+                <!-- Add New Notice Form (UPDATED to use URL) -->
+                <div class="bg-white p-6 rounded-xl shadow-xl border-t-4 border-primary-blue mb-10">
+                    <h2 class="text-2xl font-bold text-primary-blue mb-4">Generate Permanent Notice Code</h2>
+                    <form id="add-notice-form" onsubmit="addNotice(event)">
+                        
+                        <div class="mb-4">
+                            <label for="notice-title" class="block text-gray-700 font-semibold mb-2">Title of Circular/Notice (Required)</label>
+                            <input type="text" id="notice-title" name="title" required class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="notice-date" class="block text-gray-700 font-semibold mb-2">Publish Date (Required)</label>
+                                <input type="date" id="notice-date" name="date" required class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue">
+                            </div>
+                            <div>
+                                <label for="notice-url" class="block text-gray-700 font-semibold mb-2">External PDF Link URL (Required)</label>
+                                <input type="url" id="notice-url" name="pdfUrl" placeholder="https://your-host.com/notice.pdf" required class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue">
+                                <p class="text-xs text-gray-500 mt-1 font-semibold">
+                                    <span class="text-red-500">Note:</span> Uses URL to ensure persistence. Upload your PDF elsewhere (e.g., Google Drive).
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mb-6 flex items-center">
+                            <input type="checkbox" id="notice-is-new" name="isNew" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                            <label for="notice-is-new" class="ml-2 text-sm font-semibold text-red-700">Mark as New! (Will display a "NEW" badge)</label>
+                        </div>
+
+                        <button type="submit" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition shadow-md transform hover:scale-[1.01]">
+                            Generate Notice Code
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Manage Existing Notices (Now reflects the hardcoded array) -->
+                <div class="bg-white p-6 rounded-xl shadow-xl border-t-4 border-accent-gold">
+                    <h2 class="text-2xl font-bold text-primary-blue mb-4">Currently Hardcoded Notices</h2>
+                    <p class="text-sm text-gray-600 mb-4">To modify or delete these notices, you must edit the <code>defaultNotices</code> array directly in the HTML file's script block.</p>
+                    <div id="manage-notices-list" class="divide-y divide-gray-100">
+                        <!-- Notices will be rendered from defaultNotices array -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+<script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+
+  <!-- Floating Chat Button -->
+  <button id="chatToggle" 
+    class="fixed bottom-5 right-5 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition">
+    <i data-lucide="message-circle"></i>
+  </button>
+
+  <!-- Chatbot Window -->
+  <div id="chatWindow" 
+    class="fixed bottom-20 right-5 w-80 bg-white rounded-lg shadow-lg hidden flex flex-col overflow-hidden">
+    
+    <!-- Header -->
+    <div class="bg-blue-600 text-white px-4 py-2 flex justify-between items-center">
+      <span class="font-semibold">Chatbot</span>
+      <!-- Zoom Button -->
+    <div class="flex items-center space-x-2">
+<button id="zoomChat" class="text-xs px-2 py-1">
+  <a href="chatbot.html"><i data-lucide="maximize-2" class="w-4 h-4"></i></a>
+</button>
+      <button id="closeChat"><i data-lucide="x"></i></button></div>
+    </div>
+
+    <!-- Messages -->
+    <div id="chatMessages" class="flex-1 p-3 space-y-2 overflow-y-auto text-sm bg-gray-50">
+      <div class="bg-gray-200 p-2 rounded-lg self-start max-w-[75%]">👋 Hi! How can I help you?</div>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="bg-white border-t px-2 py-2 flex items-center space-x-2">
+      <!-- Mic -->
+      <button id="micButton" class="text-gray-600 p-2 hover:bg-gray-100 rounded-full">
+        <i data-lucide="mic"></i>
+      </button>
+      <!-- Input -->
+      <input id="chatInput" type="text" placeholder="Type a message..." 
+        class="flex-1 text-sm outline-none px-2 bg-transparent">
+      <!-- Voice/Send -->
+      <button id="actionButton" class="text-blue-600 p-2 rounded-full hover:bg-gray-100">
+        <i data-lucide="message-circle"></i>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    const chatToggle = document.getElementById("chatToggle");
+    const chatWindow = document.getElementById("chatWindow");
+    const closeChat = document.getElementById("closeChat");
+    const chatInput = document.getElementById("chatInput");
+    const actionButton = document.getElementById("actionButton");
+    const chatMessages = document.getElementById("chatMessages");
+    const micButton = document.getElementById("micButton");
+
+    // Toggle chatbot
+    chatToggle.addEventListener("click", () => {
+      chatWindow.classList.toggle("hidden");
+    });
+    closeChat.addEventListener("click", () => chatWindow.classList.add("hidden"));
+
+    // Toggle send/voice icon
+    chatInput.addEventListener("input", () => {
+      actionButton.innerHTML = "";
+      if (chatInput.value.trim() === "") {
+        actionButton.innerHTML = `<i data-lucide="message-circle"></i>`;
+      } else {
+        actionButton.innerHTML = `<i data-lucide="send"></i>`;
+      }
+      lucide.createIcons();
+    });
+
+    // Send message
+    actionButton.addEventListener("click", () => {
+      const text = chatInput.value.trim();
+      if (text) {
+        appendMessage(text, "user");
+        chatInput.value = "";
+        actionButton.innerHTML = `<i data-lucide="message-circle"></i>`;
+        lucide.createIcons();
+        setTimeout(() => appendMessage("🤖 This is a bot reply.", "bot"), 500);
+      }
+    });
+
+    // Append message function
+    function appendMessage(msg, sender) {
+      const div = document.createElement("div");
+      div.className = `p-2 rounded-lg max-w-[75%] ${sender === "user" ? "bg-blue-500 text-white self-end ml-auto" : "bg-gray-200 self-start"}`;
+      div.textContent = msg;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Voice Recognition (Web Speech API)
+    let recognition;
+    if ("webkitSpeechRecognition" in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = "en-US";
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        chatInput.value = transcript;
+        actionButton.innerHTML = `<i data-lucide="send"></i>`;
+        lucide.createIcons();
+      };
+    }
+
+    micButton.addEventListener("click", () => {
+      if (recognition) recognition.start();
+    });
+  </script>
+
+
+
+    <script src="homepage.js"></script>
+    <!-- Footer -->
+    <footer class="bg-primary-blue text-white mt-16 shadow-inner">
+        <div class="max-w-7xl mx-auto p-8 grid grid-cols-2 md:grid-cols-4 gap-8 border-b border-blue-700">
+            <!-- Column 1: Institute Info -->
+            <div>
+                <h4 class="text-xl font-bold text-accent-gold mb-4">Birsa Institute of Technology</h4>
+                <p class="text-sm text-gray-300">
+                    Approved by AICTE and affiliated to the State Technical University.<br>
+                    Accredited with 'A' Grade by NAAC.
+                </p>
+                <div class="flex space-x-3 mt-4 text-xl">
+                    <a href="#" class="hover:text-accent-gold transition">T</a>
+                    <a href="#" class="hover:text-accent-gold transition">F</a>
+                    <a href="#" class="hover:text-accent-gold transition">L</a>
+                    <a href="#" class="hover:text-accent-gold transition">Y</a>
+                </div>
+            </div>
+
+            <!-- Column 2: Academics -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Academics</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="text-gray-300 hover:text-accent-gold transition">B.Tech Programs</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-accent-gold transition">M.Tech Programs</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-accent-gold transition">Ph.D. Research</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-accent-gold transition">Academic Rules</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Administration -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Administration</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="text-gray-300 hover:text-accent-gold transition">Office of the Registrar</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-accent-gold transition">Finance & Accounts</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-accent-gold transition">Internal Quality Assurance Cell</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-accent-gold transition">Tenders</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 4: Contact -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                <p class="text-sm text-gray-300">
+                    Birsa Institute of Technology,<br>
+                    Technology Road, City 12345, India<br><br>
+                    Email: <a href="mailto:info@bitsindi.in" class="hover:underline">bitsindri@ac.in</a><br>
+                    Phone: +91 123 456 7890
+                </p>
+            </div>
+        </div>
+
+        <!-- Copyright Bar -->
+        <div class="max-w-7xl mx-auto text-center py-4 text-xs text-gray-400">
+            &copy; <span id="current-year"></span> Birsa Institute of Technology. All Rights Reserved. | Disclaimer | Privacy Policy
+        </div>
+    </footer>
+
+    <!-- JavaScript for Page Navigation and Notice Management -->
+    <script>
+        // --- CORE PERMANENT NOTICE DATA ---
+        // *** TO ADD A NEW NOTICE: Use the Admin Panel to generate the code, then paste it here. ***
+        // *** TO DELETE A NOTICE: Delete the corresponding object from this array. ***
+        let defaultNotices = [
+            // Sample notice (Replace with your own data)
+            { 
+                id: 1, 
+                title: 'Notice Reg. Durga Puja Vacation', 
+                date: '2025-09-26', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1RVR_-l8-LpdXdfofV_lu9nU7xsxKSXYH/view?usp=sharing', // A permanent, working link
+                isNew: true 
+            },
+            { 
+                id: 2, 
+                title: 'Notice for commencement of classes of B.Tech 3rd, 5th and 7th sem session 2025-26', 
+                date: '2025-09-25', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/18w8LeSQ6pGdDsvQsKomYKRPgfNiPh-fT/view?usp=sharing', 
+                isNew: true 
+            },
+            { 
+                id: 3, 
+                title: 'Information regarding the Idea Submission & Internal Hackathon for SIH-2025.', 
+                date: '2025-09-21', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1d5P9-bx-ZkLlNRIKUebjZxvmYrvsBNgK/view?usp=sharing', 
+                isNew: false 
+            },
+            { 
+                id: 4, 
+                title: 'Routine of 1st Sem B.Tech (Session 2025-26)', 
+                date: '2025-09-18', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/19d24V5iXlYyyVUcyZW_a_PJoo4J79NAK/view?usp=sharing', 
+                isNew: false 
+            },
+            { 
+                id: 5, 
+                title: 'Section Distribution, B.Tech., First Semester, Session 2025-26', 
+                date: '2025-09-18', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1TRqfiLktDEaye8asOz-G5GLHDasww-rh/view?usp=sharing', 
+                isNew: false // Corrected syntax: This property was outside the object.
+            },
+            { 
+                id: 6, 
+                title: 'Provisional Name List of Admitted Students of B.Tech 3rd Semester (LE) for session 2025-26 through JCECEB, Ranchi', 
+                date: '2025-09-16', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1dzoFJ7JHXipwWtMYrpGMu7f-nE8cls42/view?usp=sharing', 
+                isNew: false // Corrected syntax: This property was outside the object.
+            },
+            { 
+                id: 7, 
+                title: 'Notice for Class Commencement of B.Tech 1st Sem 2025-26', 
+                date: '2025-09-16', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/15VU_X0eh85oafKsJdE3hONcky0l8Q0s7/view?usp=sharing', // A permanent, working link
+                isNew: true 
+            },
+            { 
+                id: 8, 
+                title: 'B.Tech and M.Tech Fee Structure (2025-26)', 
+                date: '2025-09-16', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1hfmuXxBWC75wZLFkHa1bjyfz0m6HLuF3/view?usp=sharing', 
+                isNew: true 
+            },
+            { 
+                id: 9, 
+                title: 'B.Tech. 2nd, 4th & 6th Semester Examination 2024 Scrutiny Result', 
+                date: '2025-09-09', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1mGVSNVO1Y5g00WghssOlhxWJW-a8wPAf/view?usp=sharing', 
+                isNew: false 
+            },
+            { 
+                id: 10, 
+                title: 'Notice: Reg. Hostel Allotment 1st Semester B.Tech. (Session 2025-26) (Girls)', 
+                date: '2025-09-08', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1BTWz26bOmNi1xVG0tqeJ4V_ucK9tnk5F/view?usp=sharing', 
+                isNew: false 
+            },
+            { 
+                id: 11, 
+                title: 'Notice: Reg. Hostel Allotment 1st Semester B.Tech. (Session 2025-26) (Boys)', 
+                date: '2025-09-08', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1giDsD1c-gLrLEpmq3kd8MZUfclT-PVtb/view?usp=sharing', 
+                isNew: false // Corrected syntax: This property was outside the object.
+            },
+            { 
+                id: 12, 
+                title: 'Provisional Name List of Admitted Students in B.Tech 1st Semester (Session 2025-2026) through JCECEB, Ranchi', 
+                date: '2025-09-06', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1fc0G9-bAy5j4LvIq4iPzhIzcYYQ6dVsw/view?usp=sharing', 
+                isNew: false // Corrected syntax: This property was outside the object.
+            },
+            { 
+                id: 13, 
+                title: 'Notice Reg. Hostel allotment for the 1st Sem B.Tech. and M.Tech. students.', 
+                date: '2025-09-03', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1ZHTTQK9HnlGF2c2Kw8Qn7g89_KKWE-EE/view?usp=drive_link', 
+                isNew: false // Corrected syntax: This property was outside the object.
+            },
+            { 
+                id: 14, 
+                title: 'Notice for commencement of classes and Hostel allotment for B.Tech 1st sem session 2025-26', 
+                date: '2025-09-02', // YYYY-MM-DD format for correct sorting 
+                pdfUrl: 'https://drive.google.com/file/d/1R97O1hfADjydwAbKTp6uuy-Q2EPt0Bzw/view?usp=drive_link', 
+                isNew: false // Corrected syntax: This property was outside the object.
+            },  
+            // Add more notices below this line:
+            // { id: 2, title: '... New Title ...', date: '2025-10-01', pdfUrl: 'https://...', isNew: false },
+        ];
+
+
+        // --- Core Notice Management Logic (Now uses defaultNotices array directly) ---
+        let nextNoticeId = Math.max(1, ...defaultNotices.map(n => n.id)) + 1;
+        
+        // Helper to format date object to display string
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            const date = new Date(dateString);
+            if (isNaN(date)) return 'Invalid Date';
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        // --- Sorting Logic ---
+        // This logic is now the ONLY way to sort the notices (newest first)
+        function sortNotices(notices) {
+            return notices.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+
+                // 1. Sort by Date (Newest first)
+                if (dateB.getTime() !== dateA.getTime()) {
+                    return dateB.getTime() - dateA.getTime();
+                }
+
+                // 2. If dates are identical, sort by ID (to maintain publishing order, newest ID first)
+                return b.id - a.id;
+            });
+        }
+
+        // --- Rendering Functions ---
+
+        function displayAdminMessage(message, classes) {
+            const msgElement = document.getElementById('admin-message');
+            if (msgElement) {
+                msgElement.textContent = message;
+                msgElement.className = `p-4 mb-4 rounded-xl font-medium ${classes}`;
+                msgElement.classList.remove('hidden');
+                setTimeout(() => msgElement.classList.add('hidden'), 5000); // Hide after 5 seconds
+            }
+        }
+
+        function renderHomepageNotices() {
+            const list = document.getElementById('homepage-notices-list');
+            if (!list) return;
+
+            // Sort and take the top 5 from the permanent array
+            const recentNotices = sortNotices([...defaultNotices])
+                .slice(0, 5);
+
+            if (recentNotices.length === 0) {
+                list.innerHTML = '<li class="py-2 text-gray-500 italic">No official notices published at this time.</li>';
+                return;
+            }
+
+            list.innerHTML = recentNotices.map(notice => `
+                <li class="py-1">
+                    <a href="${notice.pdfUrl}" target="_blank" rel="noopener noreferrer" class="text-primary-blue hover:text-red-700 font-medium block">
+                        ${notice.title} 
+                        ${notice.isNew ? '<span class="text-xs ml-1 px-1 py-0.5 bg-red-500 text-white rounded new-badge">NEW</span>' : ''}
+                    </a>
+                    <span class="text-xs text-gray-500 block mt-0.5">${formatDate(notice.date)}</span>
+                </li>
+            `).join('');
+        }
+
+        function renderFullNoticesPage() {
+            const list = document.getElementById('full-notices-list');
+            if (!list) return;
+
+            // Sort all notices
+            const sortedNotices = sortNotices([...defaultNotices]);
+
+            if (sortedNotices.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center text-gray-500 italic p-10">
+                        The official notice board is currently empty.
+                    </div>
+                `;
+                return;
+            }
+
+            // MODIFIED: Added ${notice.isNew ? '...' : ''} inside the anchor tag
+            list.innerHTML = sortedNotices.map(notice => `
+                <div class="py-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div class="flex-1">
+                        <a href="${notice.pdfUrl}" target="_blank" rel="noopener noreferrer" class="text-lg font-semibold text-primary-blue hover:text-red-700 transition block">
+                            ${notice.title}
+                            ${notice.isNew ? '<span class="text-xs ml-1 px-1 py-0.5 bg-red-500 text-white rounded new-badge">NEW</span>' : ''}
+                        </a>
+                        <p class="text-sm text-gray-500 mt-1">Published: ${formatDate(notice.date)}</p>
+                    </div>
+                    <a href="${notice.pdfUrl}" target="_blank" rel="noopener noreferrer" class="mt-2 md:mt-0 text-red-600 font-medium flex items-center hover:underline">
+                        View/Download PDF 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function renderAdminPage() {
+            const list = document.getElementById('manage-notices-list');
+            if (!list) return;
+            
+            // Clear any previous output message boxes
+            document.getElementById('publish-success-message').classList.add('hidden');
+            document.getElementById('generated-code-box').classList.add('hidden');
+
+            // Sort notices for display
+            const sortedNotices = [...defaultNotices].sort((a, b) => b.id - a.id);
+
+            if (sortedNotices.length === 0) {
+                list.innerHTML = '<p class="text-gray-500 italic p-4">The permanent notice array is empty.</p>';
+                return;
+            }
+
+            // Note: Delete button is now an instruction on how to delete in the source code
+            list.innerHTML = sortedNotices.map(notice => `
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4">
+                    <div class="flex-1 min-w-0 pr-4">
+                        <p class="text-base font-semibold text-gray-800 truncate">${notice.title}</p>
+                        <p class="text-sm text-gray-500">Published: ${formatDate(notice.date)}</p>
+                        <p class="text-xs text-gray-400 truncate">Link: ${notice.pdfUrl}</p>
+                    </div>
+                    <span class="mt-2 md:mt-0 text-xs text-red-600 font-semibold flex-shrink-0 border border-red-200 p-1 rounded">
+                        Edit code to remove
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        // --- Action Handlers (UPDATED for code generation) ---
+
+        function addNotice(event) {
+            event.preventDefault();
+            const form = event.target;
+            const titleInput = document.getElementById('notice-title');
+            const dateInput = document.getElementById('notice-date');
+            const urlInput = document.getElementById('notice-url'); 
+            const isNewInput = document.getElementById('notice-is-new');
+
+            if (!titleInput.value || !dateInput.value || !urlInput.value) {
+                 displayAdminMessage("Error: Title, Publish Date, and a valid PDF Link URL are required.", 'bg-yellow-200 text-yellow-800');
+                 return;
+            }
+
+            const newNoticeCode = `{
+    id: ${nextNoticeId},
+    title: '${titleInput.value.replace(/'/g, "\\'")}',
+    date: '${dateInput.value}', // YYYY-MM-DD format for correct sorting
+    pdfUrl: '${urlInput.value.replace(/'/g, "\\'")}',
+    isNew: ${isNewInput.checked}
+}`;
+
+            // 1. Show success message and generated code
+            document.getElementById('publish-success-message').classList.remove('hidden');
+            const codeBox = document.getElementById('generated-code-box');
+            codeBox.textContent = newNoticeCode + ','; // Add comma for array formatting
+            codeBox.classList.remove('hidden');
+            
+            // 2. Clear form for next entry
+            form.reset();
+            
+            // 3. Increment ID for the next generation (not used in actual logic, just for display)
+            nextNoticeId++;
+        }
+
+        // Delete functions are now obsolete for permanent array
+        function deleteNotice(id) { /* No operation */ }
+        function deleteAllNotices() { /* No operation */ }
+
+        // --- Page Navigation and Initialization ---
+        
+        // Define navigation links and their corresponding page IDs
+        const navItems = {
+            'homepage-content': { desktop: 'nav-homepage-content', mobile: 'mobile-nav-homepage-content' },
+            'notices-page': { desktop: 'nav-notices-page', mobile: 'mobile-nav-notices-page' },
+            'academics-page': { desktop: 'nav-academics-page', mobile: 'mobile-nav-academics-page' }, 
+            'about-us-page': { desktop: 'nav-about-us-page', mobile: 'mobile-nav-about-us-page' }, 
+            'admissions-page': { desktop: 'nav-admissions-page', mobile: 'mobile-nav-admissions-page' }, 
+            'departments-page': { desktop: 'nav-departments-page', mobile: 'mobile-nav-departments-page' }, 
+            'rd-page': { desktop: 'nav-rd-page', mobile: 'mobile-nav-rd-page' },                         
+            'admin-page': { desktop: 'nav-admin', mobile: 'mobile-nav-admin' }
+        };
+
+        function updateActiveNav(activePageId) {
+            // Updated to use Red-700 for all active desktop links
+            const activeDesktopClasses = ['nav-active', 'text-red-700', 'font-bold', 'border-b-2', 'border-red-700'];
+            // Updated to use Red-700 for all active mobile links
+            const activeMobileClasses = ['mobile-nav-active', 'text-red-700', 'font-bold', 'bg-secondary-gray'];
+            
+            // Standard inactive classes
+            const inactiveDesktopClasses = ['text-gray-700', 'hover:text-primary-blue', 'font-medium'];
+            const inactiveMobileClasses = ['text-gray-700', 'hover:bg-secondary-gray'];
+
+            // Iterate over all defined navigation items
+            Object.entries(navItems).forEach(([pageId, ids]) => {
+                const desktopLink = document.getElementById(ids.desktop);
+                const mobileLink = document.getElementById(ids.mobile);
+                
+                const isActive = pageId === activePageId;
+
+                // --- Desktop Links ---
+                if (desktopLink) {
+                    // Reset to inactive state first
+                    desktopLink.classList.remove(...activeDesktopClasses);
+                    desktopLink.classList.remove('text-red-600', 'hover:text-red-800', 'border-red-600'); 
+                    desktopLink.classList.remove('text-primary-blue', 'border-primary-blue'); // Remove old blue classes
+                    desktopLink.classList.add(...inactiveDesktopClasses);
+
+                    if (isActive) {
+                        desktopLink.classList.remove(...inactiveDesktopClasses);
+                        // Apply the standard red active styling for ALL active pages
+                        desktopLink.classList.add(...activeDesktopClasses);
+                    }
+                }
+
+                // --- Mobile Links ---
+                if (mobileLink) {
+                    // Reset to inactive state first
+                    mobileLink.classList.remove(...activeMobileClasses);
+                    mobileLink.classList.remove('text-red-600'); 
+                    mobileLink.classList.remove('text-primary-blue'); // Remove old blue classes
+                    mobileLink.classList.add(...inactiveMobileClasses);
+                    
+                    if (isActive) {
+                        mobileLink.classList.remove(...inactiveMobileClasses);
+                        // Apply the standard red active styling for ALL active pages
+                        mobileLink.classList.add(...activeMobileClasses);
+                    }
+                }
+                
+                // Special handling for ADMIN link in Top Info Bar (if it exists)
+                if (pageId === 'admin-page') {
+                    const topAdminLink = document.querySelector('.bg-primary-blue a[onclick="navigateTo(\'admin-page\')"]');
+                    if(topAdminLink) {
+                        // Reset to default white color
+                        topAdminLink.classList.remove('text-red-300');
+                        topAdminLink.classList.add('text-white'); // Ensure default is white
+                        
+                        if (isActive) {
+                            // Highlight in a brighter color (e.g., accent-gold) when active
+                            topAdminLink.classList.add('text-accent-gold');
+                            topAdminLink.classList.remove('text-white');
+                        }
+                    }
+                }
+            });
+        }
+        
+        function navigateTo(pageId) {
+            // UPDATED PAGES LIST
+            const pages = ['homepage-content', 'notices-page', 'academics-page', 'about-us-page', 'admissions-page', 'departments-page', 'rd-page', 'admin-page']; 
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            // 1. Hide all main content sections
+            pages.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.add('hidden');
+                }
+            });
+
+            // 2. Show the requested page
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                window.scrollTo(0, 0); 
+            }
+            
+            // 3. AUTO-COLLAPSE THE MOBILE MENU (The fix)
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+            
+            // 4. Update the active state of navigation links
+            updateActiveNav(pageId);
+
+            // 5. Trigger rendering functions when navigating to dynamic pages
+            if (pageId === 'notices-page') {
+                renderFullNoticesPage();
+            } else if (pageId === 'admin-page') {
+                renderAdminPage();
+            } else {
+                // For homepage, academics, about us, admissions, departments, and R&D, just ensure home notices are rendered
+                renderHomepageNotices(); 
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- FIX START: Add event listener for mobile menu button ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            // --- FIX END ---
+            
+            // Initial view setup and rendering of dynamic content
+            navigateTo('homepage-content');
+        });
+    </script>
+
+</body>
+</html>

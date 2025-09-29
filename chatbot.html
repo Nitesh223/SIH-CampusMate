@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Input Bar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+  <div class="h-screen w-full flex flex-col items-center justify-center ">
+    <h1
+      class="text-5xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-bold pb-2">
+      CampusMate!</h1>
+    <p class="text-lg text-white pb-10">"Your smart companion for every campus query"</p>
+
+    <div class="w-full max-w-2xl bg-gray-800 rounded-full px-4 py-2 flex items-center space-x-2 shadow-lg">
+
+    
+      <button id="micButton" class="text-white p-2 rounded-full hover:bg-gray-700 transition">
+        <i data-lucide="mic"></i>
+      </button>
+
+      <input id="chatInput" type="text" placeholder="Ask your query..."
+        class="flex-1 bg-transparent outline-none text-white placeholder-gray-400">
+
+      <!-- Voice/Send Button -->
+      <button id="actionButton" class="text-white p-2 rounded-full hover:bg-gray-700 transition">
+        <i data-lucide="audio-lines"></i>
+      </button>
+    </div>
+  </div>
+
+
+  <script>
+    lucide.createIcons();
+
+    const chatInput = document.getElementById("chatInput");
+    const actionButton = document.getElementById("actionButton");
+    const micButton = document.getElementById("micButton");
+
+    chatInput.addEventListener("input", () => {
+      actionButton.innerHTML = "";
+      if (chatInput.value.trim() === "") {
+        actionButton.innerHTML = `<i data-lucide="message-circle"></i>`;
+      } else {
+        actionButton.innerHTML = `<i data-lucide="send"></i>`;
+      }
+      lucide.createIcons();
+    });
+
+    actionButton.addEventListener("click", () => {
+      const text = chatInput.value.trim();
+      if (text) {
+        console.log("Text Sent:", text);
+        chatInput.value = "";
+        actionButton.innerHTML = `<i data-lucide="message-circle"></i>`;
+        lucide.createIcons();
+      } else {
+        console.log("Voice Chat Icon Clicked (no text).");
+      }
+    });
+
+    let recognition;
+    if ("webkitSpeechRecognition" in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = "en-US";
+
+      recognition.onresult = function (event) {
+        const transcript = event.results[0][0].transcript;
+        console.log("Voice Input:", transcript);
+        chatInput.value = transcript;
+        actionButton.innerHTML = `<i data-lucide="send"></i>`;
+        lucide.createIcons();
+      };
+
+      recognition.onerror = function (event) {
+        console.error("Speech recognition error", event.error);
+      };
+    } else {
+      console.log("Web Speech API not supported in this browser.");
+    }
+
+    micButton.addEventListener("click", () => {
+      if (recognition) {
+        recognition.start();
+        console.log("Listening...");
+      }
+    });
+  </script>
+
+</body>
+
+</html>
